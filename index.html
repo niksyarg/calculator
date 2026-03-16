@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="1">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'main-bg': 'var(--bg-main)',
+                        'toggle-bg': 'var(--bg-toggle)',
+                        'screen-bg': 'var(--bg-screen)',
+                        'text-header': 'var(--text-main)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root, [data-theme="1"] {
+            --bg-main: #3a4764; --bg-toggle: #232c43; --bg-screen: #182034;
+            --key-blue-bg: #637097; --key-blue-shadow: #404e72;
+            --key-red-bg: #d03f2f; --key-red-shadow: #93261a;
+            --key-light-bg: #eae3dc; --key-light-shadow: #b3a497;
+            --text-main: #ffffff; --text-keys: #444b5a;
+        }
+        [data-theme="2"] {
+            --bg-main: #e6e6e6; --bg-toggle: #d1cccc; --bg-screen: #eeeeee;
+            --key-blue-bg: #377f86; --key-blue-shadow: #1b5f65;
+            --key-red-bg: #ca5502; --key-red-shadow: #893901;
+            --key-light-bg: #e5e4e1; --key-light-shadow: #a69d91;
+            --text-main: #35352c; --text-keys: #35352c;
+        }
+        [data-theme="3"] {
+            --bg-main: #160628; --bg-toggle: #1d0934; --bg-screen: #1d0934;
+            --key-blue-bg: #58077d; --key-blue-shadow: #bc15f4;
+            --key-red-bg: #00e0d1; --key-red-shadow: #6cf9f2;
+            --key-light-bg: #341c4f; --key-light-shadow: #871c9c;
+            --text-main: #ffe53d; --text-keys: #ffe53d;
+        }
+
+        body { font-family: 'League Spartan', sans-serif; transition: background 0.3s; }
+        .btn-light { background-color: var(--key-light-bg); box-shadow: 0 4px 0 var(--key-light-shadow); color: var(--text-keys); }
+        .btn-blue { background-color: var(--key-blue-bg); box-shadow: 0 4px 0 var(--key-blue-shadow); color: white; }
+        .btn-red { background-color: var(--key-red-bg); box-shadow: 0 4px 0 var(--key-red-shadow); color: white; }
+        
+        input[type="range"] { -webkit-appearance: none; background: var(--bg-toggle); height: 26px; border-radius: 999px; padding: 0 5px; cursor: pointer; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; background: var(--key-red-bg); height: 16px; width: 16px; border-radius: 50%; }
+    </style>
+</head>
+<body class="bg-main-bg min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-md">
+        <header class="flex justify-between items-end mb-8 text-text-header">
+            <h1 class="text-3xl">calc</h1>
+            <div class="flex items-end gap-6">
+                <span class="text-xs uppercase tracking-widest pb-1">Theme</span>
+                <div class="w-16">
+                    <div class="flex justify-between px-2 text-xs mb-1"><span>1</span><span>2</span><span>3</span></div>
+                    <input type="range" id="theme-slider" min="1" max="3" value="1" class="w-full">
+                </div>
+            </div>
+        </header>
+        <div id="display" class="bg-screen-bg text-text-header w-full h-24 rounded-xl flex items-center justify-end px-8 text-5xl mb-6 overflow-hidden">0</div>
+        <div class="bg-toggle-bg p-6 rounded-xl grid grid-cols-4 gap-4 md:gap-6">
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('7')">7</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('8')">8</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('9')">9</button>
+            <button class="btn-blue h-14 rounded-lg text-xl uppercase active:translate-y-1 active:shadow-none" onclick="del()">Del</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('4')">4</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('5')">5</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('6')">6</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressOp('+')">+</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('1')">1</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('2')">2</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('3')">3</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressOp('-')">-</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('.')">.</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressNum('0')">0</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressOp('/')">/</button>
+            <button class="btn-light h-14 rounded-lg text-3xl pt-2 active:translate-y-1 active:shadow-none" onclick="pressOp('*')">x</button>
+            <button class="btn-blue h-14 rounded-lg text-xl uppercase col-span-2 active:translate-y-1 active:shadow-none" onclick="reset()">Reset</button>
+            <button class="btn-red h-14 rounded-lg text-xl uppercase col-span-2 active:translate-y-1 active:shadow-none" onclick="calc()">=</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
